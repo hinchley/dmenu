@@ -8,7 +8,7 @@ Firstly, it relies on setting DMENU_PATH (in .xinitrc) to the set of folders tha
 
 Any apps under `/usr/bin` or other locations that I want to access via dmenu are linked to `~/apps`. This may sound laborious, but there are only a handful of apps I care about. And any dmenu scripts are stored under `~/scripts/dmenu`.
 
-The `stest` binary has been modified to output the list of all executable files witin the DMENU_PATH as "name:full path" pairs. For example: 'zed:/home/pete/.local/bin/zed'. This output is parsed by `dmenu_path` such that dmenu lists the program using the "short name", but then executes the program using the full path. This ensures that I don't need to add all folders in DMENU_PATH into PATH (such as my dmenu scripts).
+The `stest` binary has been modified to output the list of all executable files within the DMENU_PATH as "name:full path" pairs. For example: 'zed:/home/pete/.local/bin/zed'. This output is parsed by `dmenu_path` such that dmenu lists the program using the "short name", but then executes the program using the full path. This ensures that I don't need to add all folders in DMENU_PATH into PATH (such as my dmenu scripts).
 
 One final enhancement to `dmenu_run` ensures dmenu doesn't display program extensions. For example, `notesnook.AppImage` is displayed as `notesnook`.
 
