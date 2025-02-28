@@ -1,2 +1,9 @@
-#!/bin/sh
-dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+#!/bin/bash
+
+declare -A hash
+
+while IFS=: read -r key val; do
+  hash["${key%.*}"]="$val"
+done < <(dmenu_path)
+
+for key in "${!hash[@]}"; do echo "${key}"; done | dmenu "$@" | ( read key; ${hash[$key]} ) | "/bin/sh" &

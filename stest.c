@@ -44,7 +44,7 @@ test(const char *path, const char *name)
 		if (FLAG('q'))
 			exit(0);
 		match = 1;
-		puts(name);
+		printf("%s:%s\n", name, path);
 	}
 }
 

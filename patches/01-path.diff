@@ -1,0 +1,53 @@
+diff --git a/dmenu_path b/dmenu_path
+index 3a7cda7..dbe6f71 100755
+--- a/dmenu_path
++++ b/dmenu_path
+@@ -1,13 +1,11 @@
+ #!/bin/sh
+ 
+-cachedir="${XDG_CACHE_HOME:-"$HOME/.cache"}"
+-cache="$cachedir/dmenu_run"
++IFS=':'
+ 
+-[ ! -e "$cachedir" ] && mkdir -p "$cachedir"
+-
+-IFS=:
+-if stest -dqr -n "$cache" $PATH; then
+-	stest -flx $PATH | sort -u | tee "$cache"
++if [ -z "${DMENU_PATH}" ] ; then
++  stest -flx $PATH
+ else
+-	cat "$cache"
++  for p in $DMENU_PATH; do
++    stest -flx "$p"
++  done
+ fi
+diff --git a/dmenu_run b/dmenu_run
+index 834ede5..8d21600 100755
+--- a/dmenu_run
++++ b/dmenu_run
+@@ -1,2 +1,9 @@
+-#!/bin/sh
+-dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
++#!/bin/bash
++
++declare -A hash
++
++while IFS=: read -r key val; do
++  hash["${key%.*}"]="$val"
++done < <(dmenu_path)
++
++for key in "${!hash[@]}"; do echo "${key}"; done | dmenu "$@" | ( read key; ${hash[$key]} ) | "/bin/sh" &
+diff --git a/stest.c b/stest.c
+index e27d3a5..3c3fe38 100644
+--- a/stest.c
++++ b/stest.c
+@@ -44,7 +44,7 @@ test(const char *path, const char *name)
+ 		if (FLAG('q'))
+ 			exit(0);
+ 		match = 1;
+-		puts(name);
++		printf("%s:%s\n", name, path);
+ 	}
+ }
+ 
